@@ -1,0 +1,98 @@
+---
+title: "Examples"
+output:
+  pdf_document:
+    includes:
+      in_header: macros.tex
+  html_document: 
+    includes:
+      before_body: macros.html
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = NA)
+```
+
+# Macros
+
+### Set of real number
+
+LaTeX: `\newcommand \RR {\mathbb{R}}` 
+
+MathJax: `RR: "{\\mathbb{R}}"`
+
+Call: `$\RR$`
+
+Rendering: $\RR$ 
+
+### Normal distribution
+
+LaTeX: `\newcommand \normal [2] {\mathcal{N}\left({#1},{#2}\right)}` 
+
+MathJax: `normal: ["{\\mathcal{N}\\left({#1},{#2}\\right)}", 2]`
+
+Call: `$\normal{0}{\sigma^2}$`
+
+Rendering: $\normal{0}{\sigma^2}$ 
+
+### Differential operator
+
+LaTeX: `\newcommand \dx [2] [] {\mathrm{d}^{#1}\mspace{-1mu}\mathord{#2}}` 
+
+MathJax: `dx: ["{\\mathrm{d}^{#1}\\mspace{-1mu}\\mathord{#2}}", 2, ""]` 
+
+Call: `$\dx{x} + \dx[2]{f}$`
+
+Rendering: $\dx{x} + \dx[2]{f}$
+
+### Colors in maths mode
+
+LaTeX: `\usepackage{color}` + `\newcommand \warning [1] {\textcolor{red}{#1}}` 
+
+MathJax: `warning: ["\\color{red}{{#1}}", 1]` 
+
+Call: `$(a+b)^2 = a^2 + \warning{2ab} + b^2$`
+
+Rendering: $(a+b)^2 = a^2 + \warning{2ab} + b^2$ 
+
+### Colors in text mode 
+
+As MathJax doesn't work with text mode, to have a consistent method between different outputs, you could use [an R function to write raw HTML or LaTeX code](bookdown.org/yihui/rmarkdown-cookbook/font-color.html#using-an-r-function-to-write-raw-html-or-latex-code) depending on the output. 
+
+
+```{r, echo = TRUE}
+colorize <- function(x, color) {
+  if (knitr::is_latex_output()) {
+    sprintf("\\textcolor{%s}{%s}", color, x)
+  } else if (knitr::is_html_output()) {
+    sprintf("<span style='color: %s;'>%s</span>", color, x)
+  } else {
+    x
+  }
+}
+```
+
+Call: `` r colorize("Hello world!", "blue") `` (enclosed with backsticks)
+
+Rendering: `r colorize("Hello world!", "blue")`
+
+# Writing and including macros files into `.Rmd` 
+
+### File `macros.tex`
+
+```{r, tex, echo = FALSE}
+cat(readLines("macros.tex"), sep = "\n")
+```
+
+### File `macros.html`
+
+```{r, html, echo = FALSE}
+cat(readLines("macros.html"), sep = "\n")
+```
+
+### `.Rmd` YAML
+
+```{r, yaml, echo = FALSE}
+cat(readLines("examples.Rmd")[1:10], sep = "\n")
+```
+
