@@ -1,0 +1,59 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# LaTeXMathJax
+
+<!-- badges: start -->
+
+<!-- badges: end -->
+
+These two files show the correspondances between LaTeX and MathJax
+macros for:
+
+  - the set of real number,
+
+  - the normal distribution,
+
+  - the differential operator,
+
+  - using colors in maths expression.
+
+File `macros.tex`:
+
+``` tex
+\usepackage{color}
+
+\newcommand \RR {\mathbb{R}}
+\newcommand \normal [2] {\mathcal{N}\left({#1},{#2}\right)}
+\newcommand \dx [2] [] {\mathrm{d}^{#1}\mspace{-1mu}\mathord{#2}}
+\newcommand \warning [1] {\textcolor{red}{#1}}
+```
+
+File `macros.html`:
+
+``` html
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: {
+    Macros: {
+      RR: "{\\mathbb{R}}",
+      normal: ["{\\mathcal{N}\\left({#1},{#2}\\right)}", 2],
+      dx: ["{\\mathrm{d}^{#1}\\mspace{-1mu}\\mathord{#2}}", 2, ""],
+      warning: ["\\color{red}{{#1}}", 1]
+    }
+  }
+});
+</script>
+```
+
+These files could be included in your `.Rmd` file with this YAML:
+
+``` yaml
+output:
+  html_document: 
+    includes:
+      before_body: macros.html
+  pdf_document:
+    includes:
+      in_header: macros.tex
+```
